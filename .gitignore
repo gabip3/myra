@@ -1,0 +1,20 @@
+# dependências e temporários
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# ferramentas de desenvolvimento
+.claude/
+
+# documentação interna e processo criativo
+# (ficam na sua máquina e no repositório privado myra-source)
+ASSETS.md
+README.md
+
+# matéria-prima: vídeo-fonte e originais não usados pelo site
+*.mp4
+assets/evita.png
+assets/fiona.jpg
+assets/elle.jpg
+assets/myra evita.webp

@@ -1,0 +1,816 @@
+/* ============================================================
+   MYRA · estudo de cena — tokens
+   Escuro aveludado (cortina), dourado de ribalta, verde que
+   só existe porque a Elphaba existe.
+   ============================================================ */
+:root {
+  --ink: #110d13;          /* fundo: quase-preto com cast de berinjela */
+  --ink-soft: #1a141d;
+  --paper: #efe8e0;        /* texto de alto contraste */
+  --smoke: #a2969c;        /* texto secundário */
+  --gilt: #c2a06b;         /* dourado de luz de ribalta */
+  --emerald: #63b573;      /* verde Elphaba (claro) */
+  --emerald-deep: #1d4a32; /* verde Elphaba (profundo) */
+
+  --font-display: "Six Caps", "Arial Narrow", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  /* sans editorial do menu — trocar por "Poppins" aqui, se preferir */
+  --font-menu: "Jost", "Poppins", sans-serif;
+
+  --scene-name-color: #372b3d; /* letras gigantes: tom-sobre-tom, mas legíveis */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: auto; /* o scrub é quem suaviza, não o browser */
+  /* corta estouro horizontal sem criar container de rolagem
+     (hidden é o fallback para navegadores sem "clip") */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-serif);
+}
+
+/* Grão de filme: malha fina de pontos luminosos (plus-lighter) */
+html::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(at 20% 80%, #fff 1px, transparent 0px);
+  background-size: 3px 3px;
+  z-index: 999;
+  opacity: 0.04; /* acima disso o brilho levanta os pretos e "fosca" o site */
+  mix-blend-mode: plus-lighter;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Cabeçalho do estudo
+   ------------------------------------------------------------ */
+.study-head {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1.1rem 1.4rem;
+  mix-blend-mode: difference;
+}
+
+.study-head__brand {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.28em;
+  color: var(--paper);
+}
+
+/* ------------------------------------------------------------
+   Menu — hambúrguer e overlay de tela inteira ("um novo ato")
+   ------------------------------------------------------------ */
+.menu-toggle {
+  position: fixed;
+  top: 0.9rem;
+  right: 1.1rem;
+  z-index: 60;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 0.2rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  /* sombra em vez de blend: visível sobre qualquer cena, em qualquer
+     navegador (blend em elemento fixed é traiçoeiro no mobile) */
+  filter: drop-shadow(0 1px 5px rgba(10, 8, 12, 0.75));
+}
+
+.menu-toggle__label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  letter-spacing: 0.28em;
+  color: var(--paper);
+}
+
+.menu-toggle__lines {
+  display: grid;
+  gap: 9px;
+}
+
+.menu-toggle__lines i {
+  display: block;
+  width: 34px;
+  height: 2px;
+  background: var(--paper);
+  transition: transform 0.35s cubic-bezier(0.6, 0, 0.2, 1);
+}
+
+.menu-toggle.is-open .menu-toggle__lines i:first-child { transform: translateY(5.5px) rotate(45deg); }
+.menu-toggle.is-open .menu-toggle__lines i:last-child { transform: translateY(-5.5px) rotate(-45deg); }
+
+.menu-toggle:focus-visible {
+  outline: 1px solid var(--gilt);
+  outline-offset: 4px;
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: 46; /* acima do site (header 40), abaixo do grão (50) */
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10svh 8vw 6svh;
+  background:
+    radial-gradient(120% 90% at 50% 108%, var(--ink-soft) 0%, var(--ink) 62%);
+}
+
+/* imagem de área: coluna direita, atrás do texto, com máscara suave */
+.menu__image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 46vw;
+  pointer-events: none;
+  opacity: 0; /* controlada por GSAP no hover */
+}
+
+.menu__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.85) brightness(0.7);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.9) 55%, transparent 100%);
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.9) 55%, transparent 100%);
+}
+
+.menu__nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* sans geométrica fina e espaçada: legível e com voz de editorial
+   (a Six Caps fica reservada aos nomes gigantes das cenas) */
+.menu__item {
+  font-family: var(--font-menu);
+  font-weight: 300;
+  font-size: min(6.2vh, 8.5vw);
+  line-height: 1.5;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+  transition: opacity 0.35s ease, color 0.35s ease, transform 0.35s ease;
+  will-change: transform, opacity;
+}
+
+/* foco no item sob o mouse: os demais recuam para a penumbra */
+@media (hover: hover) {
+  .menu__nav:hover .menu__item { opacity: 0.3; }
+  .menu__nav .menu__item:hover {
+    opacity: 1;
+    color: var(--gilt);
+    transform: translateX(0.4em);
+  }
+}
+
+.menu__item:focus-visible {
+  outline: none;
+  color: var(--gilt);
+}
+
+.menu__signature {
+  position: relative;
+  margin-top: 6svh;
+}
+
+.menu__name {
+  font-family: var(--font-menu);
+  font-weight: 400;
+  font-size: 0.88rem;
+  letter-spacing: 0.4em;
+  color: var(--paper);
+}
+
+.menu__social {
+  margin-top: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+}
+
+.menu__social a {
+  color: var(--smoke);
+  display: inline-flex;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.menu__social a svg {
+  width: 22px;
+  height: 22px;
+}
+
+.menu__social a:hover,
+.menu__social a:focus-visible {
+  color: var(--gilt);
+  transform: translateY(-2px);
+}
+
+/* retrato: mais respiro vertical, sem imagem de hover */
+@media (orientation: portrait) {
+  .menu { padding: 12svh 9vw 7svh; }
+  .menu__item { font-size: min(4.6svh, 9vw); line-height: 1.6; }
+  .menu__image { display: none; }
+}
+
+/* ------------------------------------------------------------
+   Cena de transformação (reutilizável por personagem)
+   Camadas, de trás pra frente:
+     1. .scene__name    — nome gigante (passa ATRÁS da personagem)
+     2. .scene__canvas  — personagem (fundo transparente)
+     3. .scene__overlay — UI (intro, legenda, progresso)
+   ------------------------------------------------------------ */
+.scene {
+  /* tokens por cena — cada ato define sua "iluminação" */
+  --scene-accent: var(--emerald);
+  --scene-progress-end: var(--emerald);
+
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 85% at 50% 100%, var(--ink-soft) 0%, var(--ink) 62%);
+}
+
+/* fade preto no topo: a cena emerge da escuridão sem degrau */
+.scene::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16svh;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(rgba(17, 13, 19, 0.9), rgba(17, 13, 19, 0));
+}
+
+/* Ato I — Elphaba: no clímax, o fundo real da foto (céu de Oz) revela
+   atrás do nome, escurecido para ela seguir protagonista */
+.scene--elphaba {
+  /* claro: precisa ler por cima do vídeo escuro durante a virada */
+  --scene-name-color: #c9d8c4;
+  --scene-flood:
+    linear-gradient(rgba(17, 13, 19, 0.52), rgba(17, 13, 19, 0.52)),
+    radial-gradient(130% 110% at 50% 42%, rgba(17, 13, 19, 0) 40%, rgba(17, 13, 19, 0.9) 100%),
+    url("../assets/elphaba.jpg") center 30% / cover no-repeat;
+}
+
+/* Ato II — Fiona: a torre do conto de fadas, escurecida, atrás do nome */
+.scene--fiona {
+  --scene-accent: #c3d47e;
+  --scene-progress-end: #a8bf4e;
+  --scene-name-color: #d8dbb4; /* letras claras sobre a torre escurecida */
+  /* fundo limpo (sem a personagem): entra em enquadramento natural,
+     só com um véu leve para ela e o nome liderarem */
+  --scene-flood:
+    linear-gradient(rgba(17, 13, 19, 0.42), rgba(17, 13, 19, 0.42)),
+    radial-gradient(130% 110% at 50% 42%, rgba(17, 13, 19, 0) 45%, rgba(17, 13, 19, 0.85) 100%),
+    url("../assets/fiona-bg.png") center 30% / cover no-repeat;
+}
+
+/* Ato IV — Evita Perón: holofote champanhe e fumaça azul-petróleo */
+.scene--evita {
+  --scene-accent: #d9c19a;
+  --scene-progress-end: #c9ae7d;
+  --scene-name-color: #e8ddc6;
+  /* fundo limpo (sem a personagem): véu leve basta */
+  --scene-flood:
+    linear-gradient(rgba(17, 13, 19, 0.32), rgba(17, 13, 19, 0.32)),
+    radial-gradient(130% 110% at 50% 42%, rgba(17, 13, 19, 0) 45%, rgba(17, 13, 19, 0.85) 100%),
+    url("../assets/evita-bg.png") center 30% / cover no-repeat;
+}
+
+/* Ato III — Elle Woods: a luz inunda o palco de rosa */
+.scene--elle {
+  --scene-accent: #8f1e56;
+  --scene-progress-end: #c2427f;
+  --scene-name-color: #46293a;
+  --scene-flood:
+    radial-gradient(120% 100% at 38% 30%, #f9b6d6 0%, #ef8abc 55%, #e468a4 100%);
+}
+
+/* inundação de cor: fica ATRÁS do nome gigante (z0 < z1),
+   então as letras seguem legíveis sobre ela */
+.scene__flood {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--scene-flood, none);
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Nome gigante — playbill condensado, tom-sobre-tom */
+.scene__name {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  color: var(--scene-name-color);
+  user-select: none;
+}
+
+.scene__name span {
+  display: inline-block;
+  font-size: min(33vw, 62vh);
+  line-height: 0.82;
+  letter-spacing: 0.01em;
+  will-change: transform, opacity;
+  opacity: 0; /* revelado pelo scroll (GSAP) */
+}
+
+/* espaço entre palavras (ex.: ELLE WOODS) */
+.scene__name span.space { width: 0.26em; }
+
+/* nomes longos (9+ letras) precisam de corpo menor no desktop */
+.scene--elle .scene__name span { font-size: min(23vw, 55vh); }
+
+/* PRINCESA FIONA: reto, atravessando ATRÁS dela de ponta a ponta */
+.scene--fiona .scene__name {
+  justify-content: center;
+}
+
+.scene--fiona .scene__name span {
+  font-size: min(18vw, 42vh);
+}
+
+/* EVITA PERÓN: reto, atravessando atrás dela (como a Fiona) */
+.scene--evita .scene__name {
+  justify-content: center;
+}
+
+.scene--evita .scene__name span {
+  font-size: min(19vw, 42vh);
+}
+
+.scene__canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scene__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Fumaça de palco — na frente da personagem (dry ice), deriva
+   sozinha em loop lento; a opacidade entra pelo scroll (GSAP)
+   ------------------------------------------------------------ */
+.scene__mist {
+  position: absolute;
+  inset: 0;
+  z-index: 2; /* mesmo nível do canvas, mas depois no DOM = na frente */
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+.mist {
+  position: absolute;
+  width: 110vw;
+  height: 45vh;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(163, 214, 176, 0.26) 0%, rgba(163, 214, 176, 0) 70%);
+  will-change: transform;
+}
+
+.mist--a { bottom: -18vh; left: -30vw; animation: mist-drift 26s ease-in-out infinite alternate; }
+.mist--b { bottom: -22vh; right: -35vw; animation: mist-drift 34s ease-in-out infinite alternate-reverse; }
+.mist--c {
+  bottom: -12vh;
+  left: 10vw;
+  width: 80vw;
+  height: 32vh;
+  background: radial-gradient(closest-side, rgba(120, 190, 140, 0.18) 0%, rgba(120, 190, 140, 0) 70%);
+  animation: mist-drift 44s ease-in-out infinite alternate;
+}
+
+@keyframes mist-drift {
+  from { transform: translateX(-6vw) translateY(0); }
+  to   { transform: translateX(6vw) translateY(-3vh); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mist { animation: none; }
+}
+
+/* Estado inicial: MYRA, antes da transformação */
+.scene__intro {
+  position: absolute;
+  left: 50%;
+  bottom: 9svh;
+  transform: translateX(-50%);
+  text-align: center;
+  will-change: opacity, transform;
+}
+
+/* O nome DELA: mesma fonte dos nomes de personagem, mas NA FRENTE
+   da foto — ela é real; as personagens (atrás) são quem ela pode ser */
+.scene__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: min(13.5vw, 22vh);
+  letter-spacing: 0.08em;
+  line-height: 0.9;
+  color: var(--paper);
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
+}
+
+.scene__hint {
+  margin-top: 0.9rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  letter-spacing: 0.18em;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(10, 8, 12, 0.6);
+}
+
+.scene__hint-arrow {
+  display: inline-block;
+  animation: hint-bob 1.8s ease-in-out infinite;
+}
+
+@keyframes hint-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(0.35em); }
+}
+
+/* Legenda final — aparece perto do fim da transformação */
+.scene__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 7svh;
+  transform: translateX(-50%);
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: var(--scene-accent);
+  opacity: 0;
+  will-change: opacity, transform;
+  white-space: nowrap;
+}
+
+.scene__caption em { color: var(--paper); }
+
+/* sobre o vestido claro, branco com sombra forte */
+.scene--evita .scene__caption,
+.scene--evita .scene__caption em {
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(10, 8, 12, 0.9), 0 2px 16px rgba(10, 8, 12, 0.7);
+}
+
+/* sobre a inundação rosa, a legenda vai em branco */
+.scene--elle .scene__caption,
+.scene--elle .scene__caption em {
+  color: #ffffff;
+  text-shadow: 0 1px 14px rgba(150, 25, 85, 0.5);
+}
+
+/* Régua de progresso — fio fino na borda direita */
+.scene__progress {
+  position: absolute;
+  right: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 34svh;
+  background: rgba(239, 232, 224, 0.14);
+}
+
+.scene__progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(var(--gilt), var(--scene-progress-end));
+  transform-origin: top;
+  transform: scaleY(0);
+  will-change: transform;
+}
+
+/* ------------------------------------------------------------
+   Entreato — a ficha do espetáculo, em ritmo editorial
+   ------------------------------------------------------------ */
+.entreato {
+  --entreato-accent: var(--emerald);
+  position: relative;
+  padding: 9svh 1.6rem 4svh;
+  background:
+    radial-gradient(90% 55% at 50% 0%, var(--ink-soft) 0%, var(--ink) 70%);
+}
+
+.entreato--wicked { --entreato-accent: var(--emerald); }
+.entreato--shrek { --entreato-accent: #a8bf4e; }
+.entreato--elle { --entreato-accent: #e06eaa; }
+.entreato--evita { --entreato-accent: #d9c19a; }
+
+.entreato__inner {
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* trechos que nunca quebram no meio (ex.: "Legalmente Loira,") */
+.entreato__title .nowrap { white-space: nowrap; }
+
+/* títulos dos musicais na mesma voz do menu */
+.entreato__title {
+  font-family: var(--font-menu);
+  font-weight: 300;
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--paper);
+  line-height: 1.25;
+  margin: 0.9rem 0 0.5rem;
+}
+
+.entreato__role {
+  font-size: 0.85rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--entreato-accent);
+}
+
+.entreato__years {
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  color: var(--gilt);
+  margin-bottom: 1.8rem;
+}
+
+.entreato__text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 0.98rem;
+  line-height: 1.9;
+  color: var(--smoke);
+  margin-bottom: 2.2rem;
+}
+
+/* frases em destaque: um degrau de peso e de luz */
+.entreato__text strong {
+  font-weight: 500;
+  color: var(--paper);
+}
+
+/* EM CARTAZ — luzinha verde pulsando, informação viva de bilheteria */
+.entreato__live {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: -0.9rem 0 1.9rem;
+  font-family: var(--font-menu);
+  font-weight: 400;
+  font-size: 0.76rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--entreato-accent);
+}
+
+.entreato__live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--entreato-accent);
+  animation: live-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(99, 181, 115, 0.55); }
+  50%      { opacity: 0.55; box-shadow: 0 0 0 7px rgba(99, 181, 115, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entreato__live-dot { animation: none; }
+}
+
+/* ações empilhadas: botão de compra primeiro, galeria embaixo */
+.entreato__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.8rem;
+}
+
+.entreato__buy {
+  font-family: var(--font-menu);
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+  border: 1px solid var(--entreato-accent);
+  padding: 0.9rem 1.7rem;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.entreato__buy:hover,
+.entreato__buy:focus-visible {
+  background: var(--entreato-accent);
+  color: var(--ink);
+}
+
+/* GALERIA — conceitual, mesma voz do menu; a seta veste a cor
+   da personagem no hover */
+.entreato__gallery {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--paper);
+}
+
+.entreato__arrow {
+  display: inline-block;
+  transition: transform 0.35s ease, color 0.35s ease;
+  color: var(--smoke);
+}
+
+.entreato__gallery {
+  transition: color 0.35s ease, letter-spacing 0.35s ease;
+}
+
+.entreato__gallery:hover,
+.entreato__gallery:focus-visible {
+  color: var(--entreato-accent);
+  letter-spacing: 0.36em;
+}
+
+.entreato__gallery:hover .entreato__arrow,
+.entreato__gallery:focus-visible .entreato__arrow {
+  color: var(--entreato-accent);
+  transform: translateX(0.5em);
+}
+
+.entreato__facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  padding: 1.4rem 0;
+  border-top: 1px solid rgba(239, 232, 224, 0.12);
+  border-bottom: 1px solid rgba(239, 232, 224, 0.12);
+  margin-bottom: 2.4rem;
+}
+
+.entreato__facts dt {
+  font-size: 0.68rem;
+  font-style: italic;
+  letter-spacing: 0.22em;
+  color: var(--gilt);
+  margin-bottom: 0.35rem;
+}
+
+.entreato__facts dd {
+  font-size: 0.98rem;
+  color: var(--paper);
+}
+
+.entreato__quote {
+  font-style: italic;
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color: var(--paper);
+  border-left: 1px solid var(--entreato-accent);
+  padding-left: 1.2rem;
+}
+
+.entreato__quote cite {
+  display: block;
+  margin-top: 0.7rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  color: var(--smoke);
+}
+
+@media (max-width: 640px) {
+  .entreato__facts { grid-template-columns: 1fr; gap: 1rem; }
+
+  /* títulos compridos cabem na tela estreita sem quebrar os "nowrap" */
+  .entreato__title { font-size: clamp(1.35rem, 6.2vw, 2.2rem); }
+}
+
+/* ------------------------------------------------------------
+   Névoa de transição entre atos
+   Blobs de gradiente radial pré-suavizados (nenhum filter/blur
+   em runtime — barato no celular). O GSAP faz a deriva e o
+   crossfade de cor conforme o scroll atravessa a section.
+   ------------------------------------------------------------ */
+.act-transition {
+  position: relative;
+  height: 20svh;
+  margin-top: -8svh; /* a névoa invade o fim do entreato: sem vazio */
+  /* hidden: blobs de 115vw NÃO podem esticar a página no celular
+     (o navegador encolheria o site inteiro para caber) */
+  overflow: hidden;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.fog {
+  position: absolute;
+  width: 115vw;
+  height: 70vh;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.fog--emerald {
+  background: radial-gradient(closest-side, rgba(70, 138, 92, 0.52) 0%, rgba(70, 138, 92, 0) 70%);
+}
+
+.fog--rose {
+  background: radial-gradient(closest-side, rgba(224, 110, 168, 0.48) 0%, rgba(224, 110, 168, 0) 70%);
+}
+
+.fog--lime {
+  background: radial-gradient(closest-side, rgba(178, 201, 90, 0.46) 0%, rgba(178, 201, 90, 0) 70%);
+}
+
+.fog--champagne {
+  background: radial-gradient(closest-side, rgba(217, 193, 154, 0.42) 0%, rgba(217, 193, 154, 0) 70%);
+}
+
+.fog--a { top: -12%; left: -22%; }
+.fog--b { top: 6%; right: -28%; }
+.fog--c { bottom: -8%; left: -18%; }
+.fog--d { bottom: 10%; right: -24%; }
+
+/* ------------------------------------------------------------
+   MOBILE / RETRATO — os nomes seguem horizontais (os corpos em vw
+   escalam sozinhos); só posições de UI se ajustam.
+   ------------------------------------------------------------ */
+@media (orientation: portrait) {
+  .scene__intro { bottom: 12svh; }
+
+  .scene__progress { height: 26svh; right: 1rem; }
+
+  /* nome no terço superior: sem "sobra" morta entre ele e a personagem */
+  .scene__name {
+    align-items: flex-start;
+    padding-top: 21svh;
+  }
+
+  /* na Elphaba o nome fica centralizado: aparece na virada e some
+     por completo atrás da foto final (como aprovado) */
+  .scene--elphaba .scene__name {
+    align-items: center;
+    padding-top: 0;
+  }
+
+  /* nomes curtos do celular (FIONA, ELLE, EVITA) em corpo gigante */
+  .scene--fiona .scene__name span,
+  .scene--evita .scene__name span { font-size: min(32vw, 24svh); }
+  .scene--elle .scene__name span { font-size: min(34vw, 24svh); }
+}
+
+/* ------------------------------------------------------------
+   Acessibilidade
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .scene__hint-arrow { animation: none; }
+}

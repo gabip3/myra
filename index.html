@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover" />
+  <title>Myra Ruiz</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Six+Caps&family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Jost:wght@300;400&family=Poppins:wght@300;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+  <header class="study-head">
+    <span class="study-head__brand">MYRA RUIZ</span>
+  </header>
+
+  <!-- ============================================================
+       MENU — um ato próprio: hambúrguer minimalista que abre a
+       tela inteira como cortina de espetáculo.
+       Imagens de hover: colocar em assets/menu/ (palco.jpg, etc.)
+       ============================================================ -->
+  <button
+    class="menu-toggle"
+    aria-label="Abrir menu"
+    aria-expanded="false"
+    aria-controls="menu-overlay"
+    data-menu-toggle
+  >
+    <span class="menu-toggle__label" data-menu-label>menu</span>
+    <span class="menu-toggle__lines" aria-hidden="true"><i></i><i></i></span>
+  </button>
+
+  <div class="menu" id="menu-overlay" data-menu aria-hidden="true">
+    <!-- imagem de área (hover, só desktop): entra suave atrás do texto -->
+    <div class="menu__image" aria-hidden="true">
+      <img alt="" data-menu-img />
+    </div>
+
+    <nav class="menu__nav" aria-label="Navegação principal">
+      <a class="menu__item" href="#" data-target="top">In&iacute;cio</a>
+      <a class="menu__item" href="#">Trajet&oacute;ria</a>
+      <a class="menu__item" href="#" data-image="assets/menu/dublagem.jpg">Dublagem</a>
+      <a class="menu__item" href="#" data-image="assets/menu/workshops.jpg">Workshops</a>
+      <a class="menu__item" href="#" data-image="assets/menu/imprensa.jpg">Imprensa</a>
+      <a class="menu__item" href="#">Sobre</a>
+      <a class="menu__item" href="#">Contato</a>
+    </nav>
+
+    <footer class="menu__signature">
+      <p class="menu__name">MYRA RUIZ</p>
+      <p class="menu__social">
+        <a href="#" data-social="instagram" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4.2" />
+            <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+          </svg>
+        </a>
+        <a href="#" data-social="youtube" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="2.5" y="5.5" width="19" height="13" rx="3.5" />
+            <path d="M10.2 9.3 L15 12 L10.2 14.7 Z" fill="currentColor" stroke="none" />
+          </svg>
+        </a>
+      </p>
+    </footer>
+  </div>
+
+  <!--
+    CENA DE TRANSFORMAÇÃO
+    Uma por personagem. Para adicionar outra transformação depois,
+    duplique esta section com outro data-scene-name e registre em js/main.js.
+  -->
+  <section class="scene scene--elphaba" id="scene-elphaba" data-scene data-scene-name="ELPHABA">
+    <!-- fundo real da foto (céu de Oz): revela no clímax, ATRÁS do nome -->
+    <div class="scene__flood" data-scene-flood></div>
+
+    <!-- Nome gigante: fica ATRÁS do canvas para a personagem passar por cima -->
+    <div class="scene__name" aria-hidden="true" data-scene-name-el></div>
+
+    <!-- A personagem: frames desenhados no canvas -->
+    <canvas class="scene__canvas" data-scene-canvas></canvas>
+
+    <!-- fumaça de palco: deriva sozinha, revela junto com o clímax -->
+    <div class="scene__mist" data-scene-mist aria-hidden="true">
+      <div class="mist mist--a"></div>
+      <div class="mist mist--b"></div>
+      <div class="mist mist--c"></div>
+    </div>
+
+    <!-- Camada de UI por cima da personagem -->
+    <div class="scene__overlay">
+      <div class="scene__intro" data-scene-intro>
+        <h1 class="scene__title">MYRA RUIZ</h1>
+        <p class="scene__hint">role para transformar <span class="scene__hint-arrow">&darr;</span></p>
+      </div>
+
+      <div class="scene__progress" data-scene-progress><span></span></div>
+    </div>
+
+  </section>
+
+  <!--
+    ENTREATO — depois do número, a ficha do espetáculo.
+    Scroll normal (sem pin): ritmo editorial entre uma cena e outra.
+  -->
+  <section class="entreato entreato--wicked">
+    <div class="entreato__inner">
+      <p class="entreato__role" data-reveal>Elphaba</p>
+      <h2 class="entreato__title" data-reveal>Wicked</h2>
+      <p class="entreato__years" data-reveal>2016 &middot; 2023 &middot; 2025 &middot; 2026</p>
+
+      <p class="entreato__live" data-reveal>
+        <span class="entreato__live-dot" aria-hidden="true"></span>
+        em cartaz &middot; Rio de Janeiro &middot; at&eacute; 04 de outubro
+      </p>
+
+      <p class="entreato__text" data-reveal>
+        Aqui estar&aacute; um texto muito bonito, emocionante e devidamente
+        pesquisado sobre <strong>a trajet&oacute;ria de Myra Ruiz como
+        Elphaba</strong>. Ainda preciso descobrir datas, hist&oacute;rias,
+        curiosidades e tudo aquilo que realmente merece estar aqui. Por
+        enquanto, este texto existe para preencher espa&ccedil;o e me
+        ajudar a descobrir se o layout funciona. O site ainda nem foi
+        aprovado, mas sigo trabalhando com <strong>f&eacute;,
+        esperan&ccedil;a e um pouquinho de CSS</strong>.
+        <strong>Em nome de Jesus, vai dar certo. Am&eacute;m.</strong>
+      </p>
+      <div class="entreato__actions" data-reveal>
+        <a
+          class="entreato__buy"
+          href="https://bileto.sympla.com.br/event/114663/d/362984"
+          target="_blank"
+          rel="noopener"
+        >
+          comprar ingressos
+        </a>
+        <a class="entreato__gallery" href="#">
+          galeria <span class="entreato__arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NÉVOA: o esmeralda do Wicked se dissipa, o lima do pântano sobe -->
+  <section class="act-transition" aria-hidden="true" data-act-transition>
+    <div class="fog fog--emerald fog--a"></div>
+    <div class="fog fog--emerald fog--b"></div>
+    <div class="fog fog--lime fog--c"></div>
+    <div class="fog fog--lime fog--d"></div>
+  </section>
+
+  <!-- ATO II — Fiona: a torre do conto de fadas revela atrás do nome -->
+  <section class="scene scene--fiona" id="scene-fiona" data-scene data-scene-name="PRINCESA FIONA">
+    <div class="scene__flood" data-scene-flood></div>
+    <div class="scene__name" aria-hidden="true" data-scene-name-el></div>
+    <canvas class="scene__canvas" data-scene-canvas></canvas>
+
+    <div class="scene__overlay">
+
+      <div class="scene__progress" data-scene-progress><span></span></div>
+    </div>
+
+  </section>
+
+  <!-- ENTREATO — Shrek, o Musical -->
+  <section class="entreato entreato--shrek">
+    <div class="entreato__inner">
+      <p class="entreato__role" data-reveal>Princesa Fiona</p>
+      <h2 class="entreato__title" data-reveal>Shrek, o Musical</h2>
+      <p class="entreato__years" data-reveal>2026</p>
+      <p class="entreato__text" data-reveal>
+        Aqui futuramente viver&aacute; um texto muito mais s&eacute;rio
+        sobre Myra Ruiz como Princesa Fiona. Ainda preciso pesquisar o
+        espet&aacute;culo, os bastidores, a constru&ccedil;&atilde;o da
+        personagem e tudo o que vale a pena contar. At&eacute; l&aacute;,
+        n&atilde;o posso deixar de observar que, depois de tantos anos
+        interpretando Elphaba, aparentemente <strong>o destino decidiu que
+        Myra ainda n&atilde;o havia terminado sua fase verde</strong>. Por
+        enquanto,
+        este par&aacute;grafo s&oacute; precisa ocupar espa&ccedil;o e
+        ficar bonito. O conte&uacute;do oficial vem depois. Primeiro
+        preciso que este site seja aprovado.
+        <strong>Em nome de Jesus, ser&aacute;.</strong>
+      </p>
+      <a class="entreato__gallery" href="#" data-reveal>
+        galeria <span class="entreato__arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- NÉVOA: o lima do pântano cora para o rosa da Elle -->
+  <section class="act-transition" aria-hidden="true" data-act-transition>
+    <div class="fog fog--lime fog--a"></div>
+    <div class="fog fog--lime fog--b"></div>
+    <div class="fog fog--rose fog--c"></div>
+    <div class="fog fog--rose fog--d"></div>
+  </section>
+
+  <!-- ATO III — Elle Woods: entrada por luz e brilho, sem morph -->
+  <section class="scene scene--elle" id="scene-elle" data-scene data-scene-name="ELLE WOODS">
+    <!-- a luz inunda o palco com a cor do número (cresce com o scroll) -->
+    <div class="scene__flood" data-scene-flood></div>
+    <div class="scene__name" aria-hidden="true" data-scene-name-el></div>
+    <canvas class="scene__canvas" data-scene-canvas></canvas>
+
+    <div class="scene__overlay">
+
+      <div class="scene__progress" data-scene-progress><span></span></div>
+    </div>
+
+  </section>
+
+  <!-- ENTREATO — Legalmente Loira -->
+  <section class="entreato entreato--elle" id="entreato-elle">
+    <div class="entreato__inner">
+      <p class="entreato__role" data-reveal>Elle Woods</p>
+      <h2 class="entreato__title" data-reveal><span class="nowrap">Legalmente Loira,</span><br /><span class="nowrap">o Musical</span></h2>
+      <p class="entreato__years" data-reveal>2024</p>
+      <p class="entreato__text" data-reveal>
+        Futuramente este espa&ccedil;o contar&aacute;, com muita
+        propriedade e <strong>provavelmente muito rosa</strong>, a
+        hist&oacute;ria de Myra Ruiz como Elle Woods. Ainda preciso
+        pesquisar sobre o espet&aacute;culo, a prepara&ccedil;&atilde;o,
+        as curiosidades e tudo o que aconteceu enquanto ela provava no
+        palco que <strong>intelig&ecirc;ncia e salto alto podem
+        perfeitamente ocupar o mesmo metro quadrado</strong>. Por enquanto, estou apenas preenchendo
+        espa&ccedil;o porque o layout precisa existir antes do texto
+        oficial. O conte&uacute;do definitivo vir&aacute; depois da
+        aprova&ccedil;&atilde;o. Que, em nome de Jesus, tamb&eacute;m
+        vir&aacute;.
+      </p>
+      <a class="entreato__gallery" href="#" data-reveal>
+        galeria <span class="entreato__arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- NÉVOA: o rosa da Elle esmaece no champanhe da Evita -->
+  <section class="act-transition" aria-hidden="true" data-act-transition>
+    <div class="fog fog--rose fog--a"></div>
+    <div class="fog fog--rose fog--b"></div>
+    <div class="fog fog--champagne fog--c"></div>
+    <div class="fog fog--champagne fog--d"></div>
+  </section>
+
+  <!-- ATO IV — Evita Perón: o balcão, o holofote e a fumaça azul -->
+  <section class="scene scene--evita" id="scene-evita" data-scene data-scene-name="EVITA PERÓN">
+    <div class="scene__flood" data-scene-flood></div>
+    <div class="scene__name" aria-hidden="true" data-scene-name-el></div>
+    <canvas class="scene__canvas" data-scene-canvas></canvas>
+
+    <div class="scene__overlay">
+
+      <div class="scene__progress" data-scene-progress><span></span></div>
+    </div>
+  </section>
+
+  <!-- ENTREATO — Evita -->
+  <section class="entreato entreato--evita">
+    <div class="entreato__inner">
+      <p class="entreato__role" data-reveal>Evita Per&oacute;n</p>
+      <h2 class="entreato__title" data-reveal>Evita Open Air</h2>
+      <p class="entreato__years" data-reveal>2022 &middot; Parque Villa-Lobos &middot; S&atilde;o Paulo</p>
+      <p class="entreato__text" data-reveal>
+        Aqui entrar&aacute;, com a pompa que o balc&atilde;o da Casa Rosada
+        exige, a hist&oacute;ria de Myra Ruiz como Evita Per&oacute;n.
+        Ainda preciso levantar bastidores, curiosidades e tudo o que uma
+        primeira-dama da Argentina merece ter registrado, incluindo o
+        fato de ter sido <strong>o primeiro musical ao ar livre do
+        Brasil</strong>. At&eacute; l&aacute;, pe&ccedil;o apenas uma
+        coisa: <strong>n&atilde;o chorem por mim</strong>. Este
+        par&aacute;grafo &eacute; provis&oacute;rio e existe s&oacute;
+        para o layout ficar de p&eacute;. O conte&uacute;do oficial vem
+        depois da aprova&ccedil;&atilde;o.
+        <strong>Em nome de Jesus, e de Buenos Aires, vir&aacute;.</strong>
+      </p>
+      <a class="entreato__gallery" href="#" data-reveal>
+        galeria <span class="entreato__arrow">&rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/menu.js"></script>
+</body>
+</html>
